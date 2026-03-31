@@ -12,6 +12,7 @@ struct CalcButtonView: View {
     let label:  String
     let isWide: Bool
     let action: () -> Void
+    private let impact = UIImpactFeedbackGenerator(style: .light)
 
     init(_ button: CalcButton,
          label: String,
@@ -24,7 +25,10 @@ struct CalcButtonView: View {
     }
 
     var body: some View {
-        Button(action: action) {
+        Button(action: {
+            impact.impactOccurred()
+            action()
+        }) {
             Text(label)
                 .font(.system(size: 22, weight: .regular, design: .rounded))
                 .frame(width: isWide ? 156 : 72, height: 72)
