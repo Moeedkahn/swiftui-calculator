@@ -92,7 +92,7 @@ final class CalculatorModel {
     private func evaluate() {
         guard let pending = pendingOperation, !waitingForOperand else { return }
         let result = compute(previousInput, currentInput, op: pending)
-        expression = "\(formatted(previousInput)) \(pending.rawValue) \(formatted(currentInput)) ="
+        expression = "\(formatted(previousInput)) \(pending.rawValue) \(currentInput) ="
         currentInput = format(result)
         previousInput = ""
         pendingOperation = nil
@@ -151,10 +151,20 @@ final class CalculatorModel {
 
     private func updateDisplay() {
         displayValue = currentInput
-        if let pending = pendingOperation, !justEvaluated {
-            expression = "\(formatted(previousInput)) \(pending.rawValue)"
-        } else if !justEvaluated {
-            expression = ""
+        if let pending = pendingOperation {
+            if !waitingForOperand && !previousInput.isEmpty {
+                let liveResult = compute(previousInput, currentInput, op: pending)
+                expression    = "\(formatted(previousInput)) \(pending.rawValue) \(currentInput)"
+                displayValue  = format(liveResult)
+            } else {
+                expression   = "\(formatted(previousInput)) \(pending.rawValue)"
+                displayValue = currentInput
+            }
+        } else if justEvaluated {
+            displayValue = currentInput
+        } else {
+            expression   = ""
+            displayValue = currentInput
         }
     }
 }
