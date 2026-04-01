@@ -20,4 +20,15 @@ final class CalculatorUITests: XCTestCase {
         app.buttons["="].tap()
         XCTAssertTrue(app.staticTexts["185"].exists)
     }
+    @MainActor
+    func testTappingButtonsSubtractionShowsResult() throws {
+        let app = XCUIApplication()
+        app.launch()
+        app.buttons["8"].tap()
+        app.buttons["9"].tap()
+        app.buttons["-"].tap()
+        app.buttons["9"].tap()
+        app.buttons["="].tap()
+        XCTAssertTrue(app.staticTexts["80"].exists)
+    }
 }
